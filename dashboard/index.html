@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Launch-Odds Radar v5 — pre-token protocols, valued from their own record</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Launch-Odds Radar <span class="v">v5</span></h1>
+    <p class="sub">Pre-token protocols, valued from their own record — every figure fitted on this snapshot, nothing hardcoded.</p>
+  </div>
+  <div class="meta" id="meta"></div>
+</header>
+
+<section class="kpis" id="kpis"></section>
+
+<section class="integrity" id="integrity"></section>
+
+<section class="panel" id="acc-panel">
+  <h2>Protocol accounting <span class="dim" id="acc-total"></span></h2>
+  <div class="bar" id="acc-bar"></div>
+  <div class="legend" id="acc-legend"></div>
+  <p class="note" id="acc-note"></p>
+</section>
+
+<section class="panel" id="ev-panel">
+  <h2>Out-of-sample evidence <span class="dim">— a term enters the model only if it lowers the held-out miss in both tests</span></h2>
+  <div class="ev-grid">
+    <div>
+      <h3>Value if a token launches · typical miss, 128 traded tokens</h3>
+      <table id="ev-value"></table>
+      <p class="note" id="ev-value-note"></p>
+    </div>
+    <div>
+      <h3>Token odds · Brier score (share called right), 442 peers</h3>
+      <table id="ev-odds"></table>
+      <p class="note" id="ev-odds-note"></p>
+    </div>
+    <div>
+      <h3>Is the printed range honest?</h3>
+      <table id="ev-range"></table>
+      <p class="note" id="ev-range-note"></p>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="scatter-panel">
+  <h2>The size curve <span class="dim">— market cap vs TVL, log scale</span></h2>
+  <svg id="scatter" viewBox="0 0 640 320" role="img" aria-label="Scatter plot of market cap against TVL"></svg>
+  <p class="note">Blue: the 128 traded tokens the model was fitted on. Orange: this board's 198 rows at their terminal value. Line: the fitted size curve at the global peer multiple. A token's price is its peers' record, not a forecast.</p>
+</section>
+
+<section class="controls" id="controls">
+  <div class="chips" id="verdict-chips"></div>
+  <div class="row">
+    <label>Search <input id="q" type="search" placeholder="name, chain, category"></label>
+    <label>Tier <select id="tier"><option value="all">All tiers</option><option value="watchlist">Watchlist</option><option value="early">Early (below floor)</option><option value="offlist">Off-list (above floor, not watchlist)</option></select></label>
+    <label>Category <select id="cat"><option value="all">All categories</option></select></label>
+    <label>Chain <select id="chain"><option value="all">All chains</option></select></label>
+    <button id="reset">Reset</button>
+    <button id="csv">CSV</button>
+    <button id="json">JSON</button>
+  </div>
+  <div class="row sliders">
+    <label>Deposit <input id="dep" type="range" min="0.00005" max="0.0005" step="0.00001" value="0.0002"> <span id="dep-v"></span> of TVL</label>
+    <label>Drop share <input id="share" type="range" min="2" max="20" step="0.5" value="7"> <span id="share-v"></span></label>
+    <label>Horizon <input id="horizon" type="range" min="4" max="52" step="1" value="12"> <span id="horizon-v"></span></label>
+  </div>
+  <p class="note">Sliders recompute every row's drop, net and verdict live. The stored verdicts use the defaults: 0.02% of TVL, 7% drop share, 12 weeks. Farm means the net beats a 4% T-Bill AND $25 an hour.</p>
+</section>
+
+<section class="panel" id="board-panel">
+  <div class="board-head"><h2>Board</h2><span id="count"></span></div>
+  <div class="table-wrap">
+  <table class="board" id="board">
+    <thead><tr>
+      <th data-k="rank">#</th><th data-k="range">Range</th><th data-k="name">Protocol</th>
+      <th data-k="tvl_usd">TVL</th><th data-k="change_7d">7D</th><th data-k="age_days">No-token age</th>
+      <th data-k="token_odds">Token odds</th><th data-k="terminal_value_usd">If it launches</th>
+      <th data-k="implied_value_usd">Implied value · P25–P75</th><th data-k="verdict">Verdict · net of fees</th>
+      <th data-k="net_per_hour_usd">Net / hour</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  </div>
+</section>
+
+<section class="panel detail" id="detail" hidden></section>
+
+<footer class="panel">
+  <h2>How a launch is priced</h2>
+  <p id="method"></p>
+  <p class="note">What this page never says: that a token will launch. The odds are the peers' record (442 of 758 protocols record a token); the value is what the token would be worth if it launched, at the peers' multiple. Both are fitted on this snapshot alone (DefiLlama, 2026-11-14) and both are tested held-out above. The farm plans are costed, not promised: fees and hours are the plan's own figures, and the exit rule is printed on every row's detail view.</p>
+</footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
